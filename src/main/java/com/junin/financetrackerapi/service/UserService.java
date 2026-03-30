@@ -19,51 +19,52 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponseDTO create(UserRequestDTO dto) {
-        if (userRepository.existsByEmail(dto.email())) {
-            throw new BusinessException("Email already registered: " + dto.email());
-        }
-
-        User user = new User();
-        user.setName(dto.name());
-        user.setEmail(dto.email());
-        user.setPassword(dto.password());
-
-        return UserResponseDTO.from(userRepository.save(user));
-    }
-
     public List<UserResponseDTO> findAll() {
         return userRepository.findAll()
                 .stream()
-                .map(UserResponseDTO::from)
+                .map(UserResponseDTO::fromEntity)
                 .toList();
     }
 
     public UserResponseDTO findById(Long id) {
-        return userRepository.findById(id)
-                .map(UserResponseDTO::from)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        return UserResponseDTO.fromEntity(user);
+    }
+
+    public UserResponseDTO create(UserRequestDTO dto) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new BusinessException("Já existe um usuário com esse email");
+        }
+
+        User user = new User();
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+
+        User savedUser = userRepository.save(user);
+        return UserResponseDTO.fromEntity(savedUser);
     }
 
     public UserResponseDTO update(Long id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
 
-        if (!user.getEmail().equals(dto.email()) && userRepository.existsByEmail(dto.email())) {
-            throw new BusinessException("Email already registered: " + dto.email());
+        if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
+            throw new BusinessException("Já existe um usuário com esse email");
         }
 
-        user.setName(dto.name());
-        user.setEmail(dto.email());
-        user.setPassword(dto.password());
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
 
-        return UserResponseDTO.from(userRepository.save(user));
+        User updatedUser = userRepository.save(user);
+        return UserResponseDTO.fromEntity(updatedUser);
     }
 
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User", id);
-        }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com id: " + id));
+
+        userRepository.delete(user);
     }
 }

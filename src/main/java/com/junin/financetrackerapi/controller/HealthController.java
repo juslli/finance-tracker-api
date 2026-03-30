@@ -1,5 +1,7 @@
 package com.junin.financetrackerapi.controller;
 
+import com.junin.financetrackerapi.dto.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
 
     @GetMapping("/health")
-    public String health() {
-        return "API is running";
+    public ResponseEntity<ApiResponse<String>> health() {
+        ApiResponse<String> response = new ApiResponse<>("API está online", "ok");
+        return ResponseEntity.ok(response);
     }
 }

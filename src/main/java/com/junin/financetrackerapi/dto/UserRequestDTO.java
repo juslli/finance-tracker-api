@@ -2,20 +2,37 @@ package com.junin.financetrackerapi.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
-public record UserRequestDTO(
+public class UserRequestDTO {
 
-        @NotBlank(message = "Name is required")
-        @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
-        String name,
+    @NotBlank(message = "O nome é obrigatório")
+    private String name;
 
-        @NotBlank(message = "Email is required")
-        @Email(message = "Invalid email format")
-        String email,
+    @NotBlank(message = "O email é obrigatório")
+    @Email(message = "Email inválido")
+    private String email;
 
-        @NotBlank(message = "Password is required")
-        @Size(min = 6, message = "Password must be at least 6 characters")
-        String password
+    public UserRequestDTO() {
+    }
 
-) {}
+    public UserRequestDTO(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
