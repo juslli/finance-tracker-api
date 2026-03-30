@@ -3,6 +3,7 @@
 RESTful API for personal finance tracking built with Java and Spring Boot.
 
 ## Tech Stack
+
 - Java 17
 - Spring Boot 3
 - Spring Data JPA
@@ -11,8 +12,9 @@ RESTful API for personal finance tracking built with Java and Spring Boot.
 - Maven
 
 ## Features
+
 - User CRUD with full validation
-- Standardized error responses
+- Standardized error responses (status, message, timestamp)
 - Custom exception handling
 - API versioning (/api/v1)
 
@@ -21,7 +23,7 @@ RESTful API for personal finance tracking built with Java and Spring Boot.
 ./mvnw spring-boot:run
 ```
 
-API available at: `http://localhost:8080`
+API available at `http://localhost:8080`
 
 ## Endpoints
 
@@ -33,3 +35,9 @@ API available at: `http://localhost:8080`
 | PUT | /api/v1/users/{id} | Update user |
 | DELETE | /api/v1/users/{id} | Delete user |
 | GET | /health | Health check |
+
+## Roadmap
+
+- [ ] Spring Security + JWT Authentication
+- [ ] Transaction management
+- [ ] Financial reports
